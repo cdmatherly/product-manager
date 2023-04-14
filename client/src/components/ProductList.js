@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios';
+import { Link } from 'react-router-dom'
     
 const ProductList = (props) => {
 
@@ -48,9 +49,9 @@ const ProductList = (props) => {
                                 <td style={titleStyle}>Description:</td>
                                 <td>{product.description}</td>
                             </tr>
+                            <Link to={`/products/${product._id}`}>View</Link>
                         </tbody>
                     </table>
-                    {/* <Link to={`/products/delete/${id}`} /> */}
                 </div>
                 
             )}
