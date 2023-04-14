@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import axios from 'axios';
-export default () => {
+const ProductForm = () => {
     //keep track of what is being typed via useState hook
     const [title, setTitle] = useState(""); 
     const [price, setPrice] = useState("");
     const [description, setDescription] = useState("");
+
     //handler when the form is submitted
     const onSubmitHandler = e => {
         //prevent default behavior of the submit
@@ -15,7 +16,9 @@ export default () => {
             price,
             description
         })
-            .then(res=>console.log(res))
+            .then(res=>{
+                console.log(res)
+            })
             .catch(err=>console.log(err))
     }
 
@@ -37,3 +40,5 @@ export default () => {
         </form>
     )
 }
+
+export default ProductForm

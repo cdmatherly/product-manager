@@ -14,7 +14,7 @@ module.exports.createProduct = (request, response) => {
         .catch(err => response.json(err));
 }
 
-module.exports.getProducts = (request, response) => {
+module.exports.getAllProducts = (request, response) => {
     Product.find()
         .then((allProducts) => {
 			console.log("Running query to find all products:", allProducts)
@@ -22,3 +22,10 @@ module.exports.getProducts = (request, response) => {
 		})
         .catch((err) => response.json(err));
 }
+
+module.exports.getProduct = (request, response) => {
+    Product.findOne({_id:request.params.id})
+        .then(product => response.json(product))
+        .catch(err => response.json(err))
+}
+
