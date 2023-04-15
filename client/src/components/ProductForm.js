@@ -5,6 +5,8 @@ const ProductForm = () => {
     const [title, setTitle] = useState(""); 
     const [price, setPrice] = useState("");
     const [description, setDescription] = useState("");
+    const [validationErrors, setValidationErrors] = useState(null)
+
 
     //handler when the form is submitted
     const onSubmitHandler = e => {
@@ -18,24 +20,33 @@ const ProductForm = () => {
         })
             .then(res=>{
                 console.log(res)
+                setValidationErrors(res?.data?.errors)
+                setTitle('')
+                setPrice('')
+                setDescription('')
             })
-            .catch(err=>console.log(err))
+            .catch(err=> {
+                console.log(err)
+            })
     }
 
     return (
         <form onSubmit={onSubmitHandler}>
-            <p>
+            <div>
+                {validationErrors?.title && (<p style={{ color: 'red', marginLeft: '5px' }}>{validationErrors.title.message}</p>)}
                 <label>Title</label><br/>
                 <input type="text" onChange={(e)=>setTitle(e.target.value)} value={title}/>
-            </p>
-            <p>
+            </div>
+            <div>
+                {validationErrors?.price && (<p style={{ color: 'red', marginLeft: '5px' }}>{validationErrors.price.message}</p>)}
                 <label>Price</label><br/>
                 <input type="text" onChange={(e)=>setPrice(e.target.value)} value={price}/>
-            </p>
-            <p>
+            </div>
+                {validationErrors?.description && (<p style={{ color: 'red', marginLeft: '5px' }}>{validationErrors.description.message}</p>)}
+            <div>
                 <label>Description</label><br/>
                 <input type="text" onChange={(e)=>setDescription(e.target.value)} value={description}/>
-            </p>
+            </div>
             <input type="submit"/>
         </form>
     )

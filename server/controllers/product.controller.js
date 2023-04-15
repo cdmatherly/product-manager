@@ -11,7 +11,10 @@ module.exports.createProduct = (request, response) => {
             console.log("Creating new product:", product)
             response.json(product)
         })
-        .catch(err => response.json(err));
+        .catch(err => {
+            response.json(err)
+            console.log(err)
+        });
 }
 
 module.exports.getAllProducts = (request, response) => {
@@ -25,7 +28,32 @@ module.exports.getAllProducts = (request, response) => {
 
 module.exports.getProduct = (request, response) => {
     Product.findOne({_id:request.params.id})
-        .then(product => response.json(product))
+        .then(product => {
+            console.log("Running query to find one product:", product)
+            response.json(product)
+        })
         .catch(err => response.json(err))
 }
+
+module.exports.updateProduct = (request, response) => {
+    Product.findOneAndUpdate({_id: request.params.id}, request.body, {new:true})
+        .then(updatedProduct => {
+            console.log("Updating product:", updatedProduct)
+            response.json(updatedProduct)
+        })
+        .catch(err => response.json(err))
+}
+
+module.exports.deleteProduct = (request, response) => {
+    Product.deleteOne({ _id: request.params.id })
+        .then((deleteConfirmation) => {
+            console.log("Deleting from database product", request.params.id)
+            response.json(deleteConfirmation)
+        })
+        .catch(err => response.json(err))
+}
+
+
+
+
 

@@ -16,6 +16,10 @@ export default (props) => {
             .catch(err => console.error(err));
     },[]);
 
+    const removeFromDom = productId => {
+        setProducts(products.filter(product => product._id != productId));
+    }
+
     const mainStyle = {
         textAlign: 'center',
         maxWidth: '80%',
@@ -27,7 +31,7 @@ export default (props) => {
 			<ProductForm/>
             <hr/>
             <h1>All Products:</h1>
-            {loaded && (<ProductList products={products}/>)}
+            {loaded && (<ProductList products={products} removeFromDom={removeFromDom}/>)}
         </div>
     )
 }

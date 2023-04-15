@@ -3,6 +3,15 @@ import axios from 'axios';
 import { Link } from 'react-router-dom'
     
 const ProductList = (props) => {
+    const { removeFromDom } = props
+
+    const deleteProduct = (productId) => {
+        axios.delete(`http://localhost:8000/api/products/${productId}`)
+            .then(res => {
+                removeFromDom(productId)
+            })
+            .catch(err => console.error(err));
+    }
 
     const titleStyle = {
         fontWeight: 'bold'
@@ -31,6 +40,13 @@ const ProductList = (props) => {
         justifyContent: 'space-between',
         flexWrap: 'wrap'
     }
+
+    const linkStyle ={
+        display: 'flex',
+        justifyContent: 'center',
+        gap: '1rem'
+    }
+
     return (
         <div>
             {props.products.map( (product, id) =>
@@ -49,9 +65,12 @@ const ProductList = (props) => {
                                 <td style={titleStyle}>Description:</td>
                                 <td>{product.description}</td>
                             </tr>
-                            <Link to={`/products/${product._id}`}>View</Link>
                         </tbody>
                     </table>
+                    <div style={linkStyle}>
+                        <Link to={`/products/${product._id}`}>View</Link>
+                        <Link onClick={(event)=>{deleteProduct(product._id)}}>Delete</Link>
+                    </div>
                 </div>
                 
             )}
