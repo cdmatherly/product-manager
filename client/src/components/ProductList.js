@@ -1,17 +1,10 @@
 import React from 'react'
 import axios from 'axios';
 import { Link } from 'react-router-dom'
+import DeleteButton from './DeleteButton';
     
 const ProductList = (props) => {
-    const { removeFromDom } = props
-
-    const deleteProduct = (productId) => {
-        axios.delete(`http://localhost:8000/api/products/${productId}`)
-            .then(res => {
-                removeFromDom(productId)
-            })
-            .catch(err => console.error(err));
-    }
+    const { removeProductFromDom } = props
 
     const titleStyle = {
         fontWeight: 'bold'
@@ -47,6 +40,8 @@ const ProductList = (props) => {
         gap: '1rem'
     }
 
+
+    // Map inside <tbody>
     return (
         <div>
             {props.products.map( (product, id) =>
@@ -54,22 +49,22 @@ const ProductList = (props) => {
                     <table style={tableStyle}>
                         <tbody style={listStyle}>
                             <tr style={trStyle}>
-                                <td style={titleStyle}>Title:</td>
+                                <th style={titleStyle}>Title:</th>
                                 <td>{product.title}</td>
                             </tr>
                             <tr style={trStyle}>
-                                <td style={titleStyle}>Price:</td>
+                                <th style={titleStyle}>Price:</th>
                                 <td>{product.price}</td>
                             </tr>
                             <tr style={trStyle}>
-                                <td style={titleStyle}>Description:</td>
+                                <th style={titleStyle}>Description:</th>
                                 <td>{product.description}</td>
                             </tr>
                         </tbody>
                     </table>
                     <div style={linkStyle}>
                         <Link to={`/products/${product._id}`}>View</Link>
-                        <Link onClick={(event)=>{deleteProduct(product._id)}}>Delete</Link>
+                        <DeleteButton productId={product._id} successCallback={(e) => removeProductFromDom(product._id)}/>
                     </div>
                 </div>
                 
@@ -77,6 +72,6 @@ const ProductList = (props) => {
         </div>
     )
 }
-    
+
 export default ProductList;
 

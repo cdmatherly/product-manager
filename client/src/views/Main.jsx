@@ -3,9 +3,10 @@ import axios from 'axios'
 import ProductForm from '../components/ProductForm';
 import ProductList from '../components/ProductList';
 
-export default (props) => {
+const Main = (props) => {
     const [products, setProducts] = useState([]);
     const [loaded, setLoaded] = useState(false);
+    const [validationErrors, setValidationErrors] = useState(null)
 
     useEffect(()=>{
         axios.get('http://localhost:8000/api/products')
@@ -16,7 +17,20 @@ export default (props) => {
             .catch(err => console.error(err));
     },[]);
 
-    const removeFromDom = productId => {
+    const createProduct = (product) => {
+        axios.post('http://localhost:8000/api/products', product)
+            .then(res=>{
+                console.log(res)
+                setProducts([...products, res.data])
+            })
+            .catch(err=> {
+                console.log(product)
+                console.log(err)
+                setValidationErrors(err.response?.data?.errors)
+            })
+    }
+
+    const removeProductFromDom = productId => {
         setProducts(products.filter(product => product._id != productId));
     }
 
@@ -28,10 +42,12 @@ export default (props) => {
 
     return (
         <div style={mainStyle}>
-			<ProductForm/>
+			<ProductForm onSubmitProp={createProduct} initTitle="" initPrice="" initDesc="" validationErrors={validationErrors}/>
             <hr/>
             <h1>All Products:</h1>
-            {loaded && (<ProductList products={products} removeFromDom={removeFromDom}/>)}
+            {loaded && (<ProductList products={products} removeProductFromDom={removeProductFromDom}/>)}
         </div>
     )
 }
+
+export default Main
